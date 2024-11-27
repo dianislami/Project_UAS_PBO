@@ -1,0 +1,42 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+public class Product {
+   private String id;
+   private String name;
+   private double price;
+   private int stock;
+
+   public Product(String var1, String var2, double var3, int var5) {
+      this.id = var1;
+      this.name = var2;
+      this.price = var3;
+      this.stock = var5;
+   }
+
+   public String getId() {
+      return this.id;
+   }
+
+   public String getName() {
+      return this.name;
+   }
+
+   public double getPrice() {
+      return this.price;
+   }
+
+   public int getStock() {
+      return this.stock;
+   }
+
+   public void reduceStock(int var1) {
+      this.stock -= var1;
+   }
+
+   public void increaseStock(int var1) {
+      this.stock += var1;
+   }
+
+   public String toString() {
+      return "ID: " + this.id + ", Nama: " + this.name + ", Harga: Rp " + this.price + ", Stok: " + this.stock;
+   }
+}
