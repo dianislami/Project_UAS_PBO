@@ -1,0 +1,14 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+public abstract class Akun {
+   protected String id;
+   protected String username;
+   protected String password;
+
+   public Akun(String var1, String var2, String var3) {
+      this.id = var1;
+      this.username = var2;
+      this.password = var3;
+   }
+
+   public abstract boolean login(String var1, String var2);
+}
