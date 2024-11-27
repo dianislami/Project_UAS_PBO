@@ -1,0 +1,370 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+   private static List<Akun> accounts = new ArrayList();
+   private static Scanner scanner;
+
+   public Main() {
+   }
+
+   public static void main(String[] var0) {
+      loadData();
+
+      while(true) {
+         while(true) {
+            System.out.println("\nSelamat datang di Sistem Belanja Online!");
+            System.out.println("1. Login");
+            System.out.println("2. Buat Akun");
+            System.out.println("3. Keluar");
+            System.out.print("Pilih: ");
+            int var1 = scanner.nextInt();
+            scanner.nextLine();
+            switch (var1) {
+               case 1:
+                  login();
+                  break;
+               case 2:
+                  createAccount();
+                  break;
+               case 3:
+                  saveData();
+                  System.out.println("Terima kasih telah menggunakan sistem ini.");
+                  System.exit(0);
+               default:
+                  System.out.println("Pilihan tidak valid.");
+            }
+         }
+      }
+   }
+
+   private static void login() {
+      System.out.print("\nMasukkan username: ");
+      String var0 = scanner.nextLine();
+      System.out.print("Masukkan password: ");
+      String var1 = scanner.nextLine();
+      Iterator var2 = accounts.iterator();
+
+      Akun var3;
+      do {
+         if (!var2.hasNext()) {
+            System.out.println("Login gagal! Periksa username dan password.");
+            return;
+         }
+
+         var3 = (Akun)var2.next();
+      } while(!var3.login(var0, var1));
+
+      if (var3 instanceof Admin) {
+         System.out.println("Login berhasil! Mengalihkan ke menu Admin.");
+         adminMenu((Admin)var3);
+      } else if (var3 instanceof Customer) {
+         System.out.println("Login berhasil! Mengalihkan ke menu Customer.");
+         customerMenu((Customer)var3);
+      }
+
+   }
+
+   private static void createAccount() {
+      System.out.print("\nMasukkan username: ");
+      String var0 = scanner.nextLine();
+      System.out.print("Masukkan password: ");
+      String var1 = scanner.nextLine();
+      System.out.print("Pilih tipe akun (1. Admin, 2. Customer): ");
+      int var2 = scanner.nextInt();
+      scanner.nextLine();
+      Object var3;
+      if (var2 == 1) {
+         var3 = new Admin(String.valueOf(accounts.size() + 1), var0, var1);
+      } else {
+         if (var2 != 2) {
+            System.out.println("Pilihan tidak valid. Akun tidak dibuat.");
+            return;
+         }
+
+         var3 = new Customer(String.valueOf(accounts.size() + 1), var0, var1);
+      }
+
+      accounts.add(var3);
+      saveData();
+      System.out.println("Akun berhasil dibuat! Silakan login.");
+   }
+
+   private static void adminMenu(Admin var0) {
+      while(true) {
+         System.out.println("\nMenu Admin:");
+         System.out.println("1. Tambah Barang");
+         System.out.println("2. Edit Barang");
+         System.out.println("3. Hapus Barang");
+         System.out.println("4. Lihat Barang");
+         System.out.println("5. Logout");
+         System.out.print("Pilih: ");
+         int var1 = scanner.nextInt();
+         scanner.nextLine();
+         switch (var1) {
+            case 1:
+               System.out.print("Masukkan ID Barang: ");
+               String var2 = scanner.nextLine();
+               System.out.print("Masukkan Nama Barang: ");
+               String var3 = scanner.nextLine();
+               System.out.print("Masukkan Harga Barang: ");
+               double var4 = scanner.nextDouble();
+               System.out.print("Masukkan Stok Barang: ");
+               int var6 = scanner.nextInt();
+               scanner.nextLine();
+               var0.addProduct(new Product(var2, var3, var4, var6));
+               saveData();
+               break;
+            case 2:
+               System.out.print("Masukkan ID Barang yang ingin diedit: ");
+               String var7 = scanner.nextLine();
+               System.out.print("Masukkan Nama Baru: ");
+               String var8 = scanner.nextLine();
+               System.out.print("Masukkan Harga Baru: ");
+               double var9 = scanner.nextDouble();
+               System.out.print("Masukkan Stok Baru: ");
+               int var11 = scanner.nextInt();
+               scanner.nextLine();
+               var0.editProduct(var7, new Product(var7, var8, var9, var11));
+               saveData();
+               break;
+            case 3:
+               System.out.print("Masukkan ID Barang yang ingin dihapus: ");
+               String var12 = scanner.nextLine();
+               var0.removeProduct(var12);
+               saveData();
+               break;
+            case 4:
+               var0.viewProducts();
+               break;
+            case 5:
+               System.out.println("Logout berhasil.");
+               return;
+            default:
+               System.out.println("Pilihan tidak valid.");
+         }
+      }
+   }
+
+   private static void customerMenu(Customer var0) {
+      while(true) {
+         System.out.println("\nMenu Customer:");
+         System.out.println("1. Lihat Barang");
+         System.out.println("2. Tambah Barang ke Keranjang");
+         System.out.println("3. Hapus Barang dari Keranjang");
+         System.out.println("4. Checkout");
+         System.out.println("5. Lihat Keranjang");
+         System.out.println("6. Logout");
+         System.out.print("Pilih: ");
+         int var1 = scanner.nextInt();
+         scanner.nextLine();
+         switch (var1) {
+            case 1:
+               var0.viewProducts(getAllProducts());
+               break;
+            case 2:
+               System.out.print("Masukkan ID Barang: ");
+               String var2 = scanner.nextLine();
+               Product var3 = findProductById(var2);
+               if (var3 != null) {
+                  System.out.print("Masukkan jumlah barang: ");
+                  int var5 = scanner.nextInt();
+                  scanner.nextLine();
+                  if (var5 > 0 && var5 <= var3.getStock()) {
+                     var0.addToCart(var3, var5);
+                     saveData();
+                     break;
+                  }
+
+                  System.out.println("Jumlah barang tidak valid atau stok tidak mencukupi.");
+                  break;
+               }
+
+               System.out.println("Barang tidak ditemukan.");
+               break;
+            case 3:
+               System.out.print("Masukkan ID Barang yang ingin dihapus dari keranjang: ");
+               String var4 = scanner.nextLine();
+               var0.removeFromCart(var4);
+               saveData();
+               break;
+            case 4:
+               var0.checkout();
+               saveData();
+               break;
+            case 5:
+               var0.viewCart();
+               break;
+            case 6:
+               System.out.println("Logout berhasil.");
+               return;
+            default:
+               System.out.println("Pilihan tidak valid.");
+         }
+      }
+   }
+
+   private static List<Product> getAllProducts() {
+      ArrayList var0 = new ArrayList();
+      Iterator var1 = accounts.iterator();
+
+      while(var1.hasNext()) {
+         Akun var2 = (Akun)var1.next();
+         if (var2 instanceof Admin var3) {
+            var0.addAll(var3.getProducts());
+         }
+      }
+
+      return var0;
+   }
+
+   private static Product findProductById(String var0) {
+      Iterator var1 = getAllProducts().iterator();
+
+      Product var2;
+      do {
+         if (!var1.hasNext()) {
+            return null;
+         }
+
+         var2 = (Product)var1.next();
+      } while(!var2.getId().equals(var0));
+
+      return var2;
+   }
+
+   private static void saveData() {
+      try {
+         BufferedWriter var0 = new BufferedWriter(new FileWriter("data.txt"));
+
+         label57: {
+            try {
+               if (!accounts.isEmpty()) {
+                  Iterator var1 = accounts.iterator();
+
+                  label48:
+                  while(true) {
+                     if (var1.hasNext()) {
+                        Akun var2 = (Akun)var1.next();
+                        var0.write(var2.id + "," + var2.username + "," + var2.password + "\n");
+                        if (!(var2 instanceof Admin)) {
+                           continue;
+                        }
+
+                        Admin var3 = (Admin)var2;
+                        if (var3.getProducts().isEmpty()) {
+                           var0.write("# Produk kosong untuk Admin ini\n");
+                           continue;
+                        }
+
+                        Iterator var4 = var3.getProducts().iterator();
+
+                        while(true) {
+                           if (!var4.hasNext()) {
+                              continue label48;
+                           }
+
+                           Product var5 = (Product)var4.next();
+                           String var10001 = var5.getId();
+                           var0.write(var10001 + "," + var5.getName() + "," + var5.getPrice() + "," + var5.getStock() + "\n");
+                        }
+                     }
+
+                     System.out.println("Data berhasil disimpan ke file data.txt.");
+                     break label57;
+                  }
+               }
+
+               System.out.println("Tidak ada data untuk disimpan.");
+            } catch (Throwable var7) {
+               try {
+                  var0.close();
+               } catch (Throwable var6) {
+                  var7.addSuppressed(var6);
+               }
+
+               throw var7;
+            }
+
+            var0.close();
+            return;
+         }
+
+         var0.close();
+      } catch (IOException var8) {
+         System.out.println("Gagal menyimpan data: " + var8.getMessage());
+      }
+
+   }
+
+   private static void loadData() {
+      try {
+         BufferedReader var0 = new BufferedReader(new FileReader("data.txt"));
+
+         try {
+            Admin var2 = null;
+
+            while(true) {
+               String var1;
+               if ((var1 = var0.readLine()) == null) {
+                  System.out.println("Data berhasil dimuat dari file data.txt.");
+                  break;
+               }
+
+               String[] var3 = var1.split(",");
+               String var4;
+               String var5;
+               if (var3.length == 3) {
+                  var4 = var3[0];
+                  var5 = var3[1];
+                  String var6 = var3[2];
+                  if (var5.startsWith("admin")) {
+                     var2 = new Admin(var4, var5, var6);
+                     accounts.add(var2);
+                  } else {
+                     accounts.add(new Customer(var4, var5, var6));
+                  }
+               } else if (var3.length == 4) {
+                  if (var2 != null) {
+                     var4 = var3[0];
+                     var5 = var3[1];
+                     double var14 = Double.parseDouble(var3[2]);
+                     int var8 = Integer.parseInt(var3[3]);
+                     Product var9 = new Product(var4, var5, var14, var8);
+                     var2.addProduct(var9);
+                  }
+               } else if (var1.startsWith("#")) {
+               }
+            }
+         } catch (Throwable var11) {
+            try {
+               var0.close();
+            } catch (Throwable var10) {
+               var11.addSuppressed(var10);
+            }
+
+            throw var11;
+         }
+
+         var0.close();
+      } catch (FileNotFoundException var12) {
+         System.out.println("File data.txt tidak ditemukan. Memulai dengan data kosong.");
+      } catch (IOException var13) {
+         System.out.println("Gagal memuat data: " + var13.getMessage());
+      }
+
+   }
+
+   static {
+      scanner = new Scanner(System.in);
+   }
+}
