@@ -1,30 +1,14 @@
 import java.util.List;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class CustomerDrive {
     private Customer customer;
-
-    // Daftar produk, bisa diambil dari sumber lain seperti Admin atau Database
     private List<Product> allProducts;
 
-    public CustomerDrive(Customer customer) {
-        this.customer = customer;
-        this.allProducts = generateDummyProducts();  // Memanggil metode untuk mendapatkan produk
-    }
-
-    // Contoh metode untuk mendapatkan daftar produk, bisa diganti sesuai kebutuhan
-    private List<Product> getAllProducts() {
-        return allProducts;
-    }
-
-    // Metode untuk membuat produk dummy, atau bisa diambil dari Admin atau database
-    private List<Product> generateDummyProducts() {
-        List<Product> products = new ArrayList<>();
-        products.add(new Product("P001", "Laptop", 10000000, 5));
-        products.add(new Product("P002", "Smartphone", 5000000, 10));
-        products.add(new Product("P003", "Headphone", 2000000, 15));
-        return products;
+    // Constructor to initialize Customer object and all products list
+    public CustomerDrive(Customer customer, List<Product> allProducts) {
+        this.customer = customer; // Ensure customer is passed correctly
+        this.allProducts = allProducts; // List of all products
     }
 
     public void start() {
@@ -43,10 +27,24 @@ public class CustomerDrive {
             switch (choice) {
                 case 1:
                     System.out.println("Daftar Barang:");
-                    customer.viewProducts(getAllProducts());  // Menampilkan daftar produk
+                    customer.viewProducts(allProducts);  // Pass all products list
                     break;
                 case 2:
-                    // kode untuk menambah ke keranjang
+                    System.out.print("Masukkan ID Barang: ");
+                    String addId = scanner.nextLine();
+                    Product product = findProductById(addId);
+                    if (product != null) {
+                        System.out.print("Masukkan jumlah barang: ");
+                        int quantity = scanner.nextInt();
+                        scanner.nextLine();
+                        if (quantity > 0 && quantity <= product.getStock()) {
+                            customer.addToCart(product, quantity);
+                        } else {
+                            System.out.println("Jumlah barang tidak valid atau stok tidak mencukupi.");
+                        }
+                    } else {
+                        System.out.println("Barang tidak ditemukan.");
+                    }
                     break;
                 case 3:
                     customer.viewCart();
@@ -55,10 +53,21 @@ public class CustomerDrive {
                     customer.checkout();
                     break;
                 case 5:
+                    System.out.println("Logout berhasil.");
                     return;
                 default:
                     System.out.println("Pilihan tidak valid.");
             }
         }
+    }
+
+    // Method to find product by ID
+    private Product findProductById(String id) {
+        for (Product product : allProducts) {
+            if (product.getId().equals(id)) {
+                return product;
+            }
+        }
+        return null;
     }
 }
