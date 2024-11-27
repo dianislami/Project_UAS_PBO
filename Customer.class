@@ -1,0 +1,93 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Customer extends Akun {
+   private List<CartItem> cart = new ArrayList();
+
+   public Customer(String var1, String var2, String var3) {
+      super(var1, var2, var3);
+   }
+
+   public boolean login(String var1, String var2) {
+      return this.username.equals(var1) && this.password.equals(var2);
+   }
+
+   public void viewProducts(List<Product> var1) {
+      if (var1.isEmpty()) {
+         System.out.println("Tidak ada barang tersedia.");
+      } else {
+         System.out.println("+----+---------------+---------+-------+");
+         System.out.println("| ID | Nama Barang   | Harga   | Stok  |");
+         System.out.println("+----+---------------+---------+-------+");
+         Iterator var2 = var1.iterator();
+
+         while(var2.hasNext()) {
+            Product var3 = (Product)var2.next();
+            System.out.printf("| %-2s | %-13s | %-7.0f | %-5d |\n", var3.getId(), var3.getName(), var3.getPrice(), var3.getStock());
+         }
+
+         System.out.println("+----+---------------+---------+-------+");
+      }
+
+   }
+
+   public void addToCart(Product var1, int var2) {
+      if (var1.getStock() >= var2) {
+         var1.reduceStock(var2);
+         this.cart.add(new CartItem(var1, var2));
+         System.out.println("" + var2 + " unit " + var1.getName() + " berhasil ditambahkan ke keranjang.");
+      } else {
+         System.out.println("Stok tidak mencukupi untuk jumlah yang diminta.");
+      }
+
+   }
+
+   public void removeFromCart(String var1) {
+      boolean var2 = false;
+
+      for(int var3 = 0; var3 < this.cart.size(); ++var3) {
+         if (((CartItem)this.cart.get(var3)).getProduct().getId().equals(var1)) {
+            ((CartItem)this.cart.get(var3)).getProduct().increaseStock(((CartItem)this.cart.get(var3)).getQuantity());
+            this.cart.remove(var3);
+            var2 = true;
+            break;
+         }
+      }
+
+      if (var2) {
+         System.out.println("Barang dengan ID " + var1 + " berhasil dihapus dari keranjang.");
+      } else {
+         System.out.println("Barang dengan ID " + var1 + " tidak ditemukan di keranjang.");
+      }
+
+   }
+
+   public void checkout() {
+      double var1 = 0.0;
+
+      CartItem var4;
+      for(Iterator var3 = this.cart.iterator(); var3.hasNext(); var1 += var4.getProduct().getPrice() * (double)var4.getQuantity()) {
+         var4 = (CartItem)var3.next();
+      }
+
+      System.out.println("Checkout berhasil. Total pembayaran: Rp " + var1);
+      this.cart.clear();
+   }
+
+   public void viewCart() {
+      if (this.cart.isEmpty()) {
+         System.out.println("Keranjang kosong.");
+      } else {
+         System.out.println("\nIsi Keranjang:");
+         Iterator var1 = this.cart.iterator();
+
+         while(var1.hasNext()) {
+            CartItem var2 = (CartItem)var1.next();
+            System.out.println(var2);
+         }
+      }
+
+   }
+}
