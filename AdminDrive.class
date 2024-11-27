@@ -1,0 +1,65 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.util.Scanner;
+
+public class AdminDrive {
+   private Admin admin;
+
+   public AdminDrive(Admin var1) {
+      this.admin = var1;
+   }
+
+   public void start() {
+      Scanner var1 = new Scanner(System.in);
+
+      int var2;
+      do {
+         System.out.println("\nMenu Admin:");
+         System.out.println("1. Tambah Produk");
+         System.out.println("2. Hapus Produk");
+         System.out.println("3. Edit Produk");
+         System.out.println("4. Lihat Semua Produk");
+         System.out.println("5. Keluar");
+         System.out.print("Pilih: ");
+         var2 = var1.nextInt();
+         var1.nextLine();
+         switch (var2) {
+            case 1:
+               System.out.print("Masukkan ID Produk: ");
+               String var3 = var1.nextLine();
+               System.out.print("Masukkan Nama Produk: ");
+               String var4 = var1.nextLine();
+               System.out.print("Masukkan Harga Produk: ");
+               double var5 = var1.nextDouble();
+               this.admin.addProduct(new Product(var3, var4, var5));
+               break;
+            case 2:
+               System.out.print("Masukkan ID Produk yang ingin dihapus: ");
+               String var7 = var1.nextLine();
+               this.admin.removeProduct(var7);
+               break;
+            case 3:
+               System.out.print("Masukkan ID Produk yang ingin diubah: ");
+               String var8 = var1.nextLine();
+               System.out.print("Masukkan Nama Baru: ");
+               String var9 = var1.nextLine();
+               System.out.print("Masukkan Harga Baru: ");
+               double var10 = var1.nextDouble();
+               this.admin.editProduct(var8, new Product(var8, var9, var10));
+               break;
+            case 4:
+               System.out.println("Daftar Produk:");
+               this.admin.getProducts().forEach((var0) -> {
+                  System.out.println(var0.toString());
+               });
+               break;
+            case 5:
+               System.out.println("Keluar dari menu Admin.");
+               break;
+            default:
+               System.out.println("Pilihan tidak valid.");
+         }
+      } while(var2 != 5);
+
+      var1.close();
+   }
+}
