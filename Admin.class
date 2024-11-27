@@ -1,0 +1,63 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Admin extends Akun {
+   private List<Product> products = new ArrayList();
+
+   public Admin(String var1, String var2, String var3) {
+      super(var1, var2, var3);
+   }
+
+   public boolean login(String var1, String var2) {
+      return this.username.equals(var1) && this.password.equals(var2);
+   }
+
+   public void addProduct(Product var1) {
+      this.products.add(var1);
+      System.out.println("Barang berhasil ditambahkan: " + String.valueOf(var1));
+   }
+
+   public void editProduct(String var1, Product var2) {
+      for(int var3 = 0; var3 < this.products.size(); ++var3) {
+         if (((Product)this.products.get(var3)).getId().equals(var1)) {
+            this.products.set(var3, var2);
+            System.out.println("Barang berhasil diubah.");
+            return;
+         }
+      }
+
+      System.out.println("Barang dengan ID tersebut tidak ditemukan.");
+   }
+
+   public void removeProduct(String var1) {
+      this.products.removeIf((var1x) -> {
+         return var1x.getId().equals(var1);
+      });
+      System.out.println("Barang berhasil dihapus.");
+   }
+
+   public void viewProducts() {
+      if (this.products.isEmpty()) {
+         System.out.println("Tidak ada barang tersedia.");
+      } else {
+         System.out.println("+----+---------------+---------+-------+");
+         System.out.println("| ID | Nama Barang   | Harga   | Stok  |");
+         System.out.println("+----+---------------+---------+-------+");
+         Iterator var1 = this.products.iterator();
+
+         while(var1.hasNext()) {
+            Product var2 = (Product)var1.next();
+            System.out.printf("| %-2s | %-13s | %-7.0f | %-5d |\n", var2.getId(), var2.getName(), var2.getPrice(), var2.getStock());
+         }
+
+         System.out.println("+----+---------------+---------+-------+");
+      }
+
+   }
+
+   public List<Product> getProducts() {
+      return this.products;
+   }
+}
