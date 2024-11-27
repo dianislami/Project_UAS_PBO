@@ -1,0 +1,61 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.util.Scanner;
+
+public class CustomerDrive {
+   private Customer customer;
+   private Admin admin;
+
+   public CustomerDrive(Customer var1, Admin var2) {
+      this.customer = var1;
+      this.admin = var2;
+   }
+
+   public void start() {
+      Scanner var1 = new Scanner(System.in);
+
+      int var2;
+      do {
+         System.out.println("\nMenu Customer:");
+         System.out.println("1. Lihat Produk");
+         System.out.println("2. Tambah ke Keranjang");
+         System.out.println("3. Checkout");
+         System.out.println("4. Lihat Riwayat");
+         System.out.println("5. Keluar");
+         System.out.print("Pilih: ");
+         var2 = var1.nextInt();
+         var1.nextLine();
+         switch (var2) {
+            case 1:
+               this.customer.viewProducts(this.admin.getProducts());
+               break;
+            case 2:
+               System.out.print("Masukkan ID Produk: ");
+               String var3 = var1.nextLine();
+               Product var4 = (Product)this.admin.getProducts().stream().filter((var1x) -> {
+                  return var1x.getId().equals(var3);
+               }).findFirst().orElse((Object)null);
+               if (var4 != null) {
+                  this.customer.addToCart(var4);
+               } else {
+                  System.out.println("Produk tidak ditemukan.");
+               }
+               break;
+            case 3:
+               System.out.print("Masukkan metode pembayaran: ");
+               String var5 = var1.nextLine();
+               this.customer.checkout(var5);
+               break;
+            case 4:
+               this.customer.viewHistory();
+               break;
+            case 5:
+               System.out.println("Keluar dari menu Customer.");
+               break;
+            default:
+               System.out.println("Pilihan tidak valid.");
+         }
+      } while(var2 != 5);
+
+      var1.close();
+   }
+}
