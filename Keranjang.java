@@ -10,10 +10,24 @@ import java.util.List;
 
 public class Keranjang {
     private ArrayList<Barang> barang;
+    private String customerUsername;
+    private double diskon;
 
-    public Keranjang() {
+    public Keranjang(String customerUsername) {
+        this.customerUsername = customerUsername;
         this.barang = new ArrayList<>();
+        this.diskon = 0;
         muatDariFile();
+    }
+
+    // Method for applying discount
+    public void setDiskon(double diskon) {
+        if (diskon >= 0 && diskon <= 100) {
+            this.diskon = diskon;
+            System.out.println("Diskon sebesar " + diskon + "% berhasil diterapkan.");
+        } else {
+            System.out.println("Diskon harus antara 0% dan 100%.");
+        }
     }
 
     // Method untuk menambahkan barang ke keranjang
@@ -60,6 +74,20 @@ public class Keranjang {
         System.out.println("Barang dengan ID " + id + " tidak ditemukan di keranjang.");
     }
 
+    // Method to calculate total price with quantity and discount
+    public double hitungTotal() {
+        double total = 0;
+        for (Barang item : barang) {
+            total += item.getHargaBarang() * item.getStokBarang(); // Quantity affects total price
+        }
+        return total - (total * diskon / 100); // Apply discount
+    }
+
+    // Display total after discount
+    public void tampilkanTotal() {
+        System.out.println("Total harga setelah diskon: Rp" + hitungTotal());
+    }
+
     // Method untuk menampilkan barang dalam keranjang
     public void tampilkanBarang() {
         if (barang.isEmpty()) {
@@ -77,9 +105,14 @@ public class Keranjang {
         return barang;
     }
 
+    // Getter for diskon
+    public double getDiskon() {
+        return this.diskon;
+    }
+
     // Method untuk menyimpan keranjang ke file
     public void simpanKeFile() {
-        File fileKeranjang = new File("keranjang.txt");
+        File fileKeranjang = new File("C:\\Users\\asusa\\OneDrive\\Documents\\java\\uas\\customer\\" + customerUsername + "\\keranjang.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileKeranjang))) {
             for (Barang item : barang) {
                 writer.write(item.getIdBarang() + "," +
@@ -95,7 +128,7 @@ public class Keranjang {
     }
 
     public void muatDariFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("keranjang.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\asusa\\OneDrive\\Documents\\java\\uas\\customer\\" + customerUsername + "\\keranjang.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
