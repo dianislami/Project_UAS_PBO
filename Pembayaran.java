@@ -1,16 +1,14 @@
 public abstract class Pembayaran {
-    private String jenisPembayaran; // Jenis metode pembayaran
+    protected String id; // ID pembayaran
 
-    // Constructor
-    public Pembayaran(String jenisPembayaran) {
-        this.jenisPembayaran = jenisPembayaran;
+    public Pembayaran(String id) {
+        this.id = id;
     }
 
-    // Getter untuk jenis pembayaran
-    public String getJenisPembayaran() {
-        return jenisPembayaran;
+    public String getId() {
+        return id;
     }
 
-    // Method abstrak untuk memproses pembayaran
-    public abstract void prosesPembayaran(double jumlah);
+    public abstract String getJenisPembayaran();
+    public abstract void prosesPembayaran();
 }
