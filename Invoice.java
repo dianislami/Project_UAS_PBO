@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,11 +11,11 @@ public class Invoice {
     private Transaksi transaksi;
     private Pembayaran pembayaran; // Metode pembayaran yang digunakan
     private double totalBayar; // Total yang harus dibayar
-    private int nomorTransaksi = 1; // Nomor transaksi unik
+    private int nomorTransaksi = 101; // Nomor transaksi unik
     private String tanggalWaktu;
 
     // Constructor
-    public Invoice(Transaksi transaksi, Pembayaran pembayaran) {
+    public Invoice(Transaksi transaksi, Pembayaran pembayaran, double totalBayar) {
         if (transaksi == null || pembayaran == null) {
             throw new IllegalArgumentException("Transaksi dan Pembayaran tidak boleh null.");
         }
@@ -58,13 +59,31 @@ public class Invoice {
         System.out.println("Metode Pembayaran: " + pembayaran.getJenisPembayaran());
         System.out.println("=========================");
 
-        simpanKeFile();
+        simpanInvoice();
+    }
+
+    private void simpanInvoice() {
+        // Daftar lokasi file tujuan
+        String[] fileNames = {
+            "invoices.txt", // File global untuk admin
+            "C:\\Users\\asusa\\OneDrive\\Documents\\java\\uas\\customer\\" + transaksi.getAkun().getUsername() + "\\transaksi.txt" // File spesifik untuk customer
+        };
+    
+        try {
+            for (String fileName : fileNames) {
+                simpanKeFile(fileName); // true = append mode
+            }
+            System.out.println("Invoice berhasil disimpan ke kedua file.");
+        } catch (IOException e) {
+            System.out.println("Terjadi kesalahan saat menyimpan invoice ke file: " + e.getMessage());
+        }
     }
 
     // Method untuk menyimpan invoice ke file txt
-    private void simpanKeFile() {
-        String fileName = "invoices.txt";  // Nama file dengan timestamp
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+    private void simpanKeFile(String fileName) throws IOException {
+        File file = new File(fileName);
+ 
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.write("======== INVOICE ========");
             writer.newLine();
             writer.write("Nomor Transaksi: T-" + nomorTransaksi);
@@ -94,13 +113,19 @@ public class Invoice {
 
     // Method untuk membaca invoice dari file
     public static void bacaDariFile(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists() || file.length() == 0) { // Cek jika file tidak ada atau kosong
+            System.out.println("Belum ada transaksi yang tersimpan.");
+            return;
+        }
+
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);  // Menampilkan baris-baris file
             }
         } catch (IOException e) {
-            System.out.println("Belum ada transaksi yang tersimpan");
+            System.out.println("Terjadi kesalahan saat membaca file");
         }
     }
 }
