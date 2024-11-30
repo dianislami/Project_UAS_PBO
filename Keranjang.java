@@ -1,53 +1,117 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Keranjang {
-    private ArrayList<Barang> barang; // Daftar barang dalam keranjang
+    private ArrayList<Barang> barang;
 
-    // Constructor
     public Keranjang() {
         this.barang = new ArrayList<>();
+        muatDariFile();
     }
 
     // Method untuk menambahkan barang ke keranjang
-    public void tambahBarang(Barang item) {
-        this.barang.add(item);
-        System.out.println("Barang " + item.getNama() + " berhasil ditambahkan ke keranjang.");
+    public void tambahBarang(Barang item, int jumlah) {
+        // Cek apakah barang sudah ada di keranjang
+        for (Barang b : barang) {
+            if (b.getIdBarang().equals(item.getIdBarang())) {
+                // Jika ada, tambahkan jumlah barang yang ada
+                item.kurangiStok(jumlah);
+                b.tambahStok(jumlah);
+                System.out.println(jumlah + " unit " + item.getNamaBarang() + " ditambahkan ke keranjang. Total jumlah: " + b.getStokBarang());
+                simpanKeFile();
+                return;
+            }
+        }
+        if (item.kurangiStok(jumlah)) { // Kurangi stok jika cukup
+            barang.add(new Barang(item.getIdBarang(), item.getNamaBarang(), item.getHargaBarang(), jumlah));
+            System.out.println(jumlah + " unit " + item.getNamaBarang() + " ditambahkan ke keranjang.");
+            simpanKeFile();
+        } else {
+            System.out.println("Gagal menambahkan barang ke keranjang. Stok tidak mencukupi.");
+        }
+
     }
 
     // Method untuk menghapus barang dari keranjang
-    public void hapusBarang(Barang item) {
-        if (this.barang.contains(item)) {
-            this.barang.remove(item);
-            System.out.println("Barang " + item.getNama() + " berhasil dihapus dari keranjang.");
+    public void hapusBarang(String id) {
+        for (Barang b : barang) {
+            if (b.getIdBarang().equals(id)) {
+                List<Barang> daftarBarangUtama = Barang.bacaDataBarang(); // Baca data dari barang.txt
+                for (Barang barangUtama : daftarBarangUtama) {
+                    if (barangUtama.getIdBarang().equals(id)) {
+                        barangUtama.tambahStok(b.getStokBarang()); // Tambahkan stok barang yang dihapus
+                        Barang.simpanDataBarang(daftarBarangUtama); // Simpan kembali daftar barang ke file
+                        break;
+                    }
+                }
+                barang.remove(b);
+                System.out.println(b.getNamaBarang() + " dihapus dari keranjang.");
+                simpanKeFile();
+                return;
+            }
+        }
+        System.out.println("Barang dengan ID " + id + " tidak ditemukan di keranjang.");
+    }
+
+    // Method untuk menampilkan barang dalam keranjang
+    public void tampilkanBarang() {
+        if (barang.isEmpty()) {
+            System.out.println("Keranjang kosong.");
         } else {
-            System.out.println("Barang tidak ditemukan di keranjang.");
+            System.out.println("Daftar barang dalam keranjang:");
+            for (Barang item : barang) {
+                System.out.println(item.getIdBarang() + "| " + item.getNamaBarang() + " | Harga: Rp" + item.getHargaBarang() +
+                                   " | Jumlah: " + item.getStokBarang());
+            }
         }
     }
 
-    // Method untuk mendapatkan daftar barang dalam keranjang
     public ArrayList<Barang> getBarang() {
         return barang;
     }
 
-    // Method untuk menghitung total harga barang dalam keranjang
-    public double hitungTotal() {
-        double total = 0;
-        for (Barang item : barang) {
-            total += item.getHarga();
+    // Method untuk menyimpan keranjang ke file
+    public void simpanKeFile() {
+        File fileKeranjang = new File("keranjang.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileKeranjang))) {
+            for (Barang item : barang) {
+                writer.write(item.getIdBarang() + "," +
+                             item.getNamaBarang() + "," +
+                             item.getHargaBarang() + "," +
+                             item.getStokBarang());
+                writer.newLine();
+            }
+            System.out.println("Data keranjang berhasil disimpan ke keranjang.txt");
+        } catch (IOException e) {
+            System.out.println("Gagal menyimpan data keranjang: " + e.getMessage());
         }
-        return total;
     }
 
-    // Method untuk menampilkan isi keranjang
-    public void tampilkanKeranjang() {
-        if (barang.isEmpty()) {
-            System.out.println("Keranjang kosong.");
-        } else {
-            System.out.println("Isi Keranjang:");
-            for (Barang item : barang) {
-                System.out.println("- " + item.getNama() + " | Harga: " + item.getHarga());
+    public void muatDariFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("keranjang.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 4) {
+                    String id = data[0];
+                    String nama = data[1];
+                    double harga = Double.parseDouble(data[2]);
+                    int stok = Integer.parseInt(data[3]);
+                    barang.add(new Barang(id, nama, harga, stok));
+                }
             }
-            System.out.println("Total Harga: " + hitungTotal());
+            System.out.println("Data keranjang berhasil dimuat dari file.");
+        } catch (FileNotFoundException e) {
+            System.out.println("File keranjang.txt tidak ditemukan. Memulai dengan keranjang kosong.");
+        } catch (IOException e) {
+            System.out.println("Gagal membaca data keranjang: " + e.getMessage());
         }
     }
 }
