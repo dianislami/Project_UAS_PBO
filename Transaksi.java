@@ -11,16 +11,17 @@ public class Transaksi {
     }
 
     // Method untuk menambahkan barang ke transaksi
-    public void tambahBarang(Barang item) {
-        this.barang.add(item);
-        System.out.println("Barang " + item.getNama() + " berhasil ditambahkan ke transaksi.");
+    public void tambahBarang(Barang item, int jumlah) {
+        // Menambahkan barang ke dalam transaksi
+        this.barang.add(new Barang(item.getIdBarang(), item.getNamaBarang(), item.getHargaBarang(), jumlah));
+        System.out.println("Barang " + item.getNamaBarang() + " sebanyak " + jumlah + " berhasil ditambahkan ke transaksi.");
     }
 
     // Method untuk menghapus barang dari transaksi
     public void hapusBarang(Barang item) {
         if (this.barang.contains(item)) {
             this.barang.remove(item);
-            System.out.println("Barang " + item.getNama() + " berhasil dihapus dari transaksi.");
+            System.out.println("Barang " + item.getNamaBarang() + " berhasil dihapus dari transaksi.");
         } else {
             System.out.println("Barang tidak ditemukan dalam transaksi.");
         }
@@ -30,7 +31,7 @@ public class Transaksi {
     public double hitungTotal() {
         double total = 0;
         for (Barang item : barang) {
-            total += item.getHarga();
+            total += item.getHargaBarang();
         }
         return total;
     }
@@ -43,19 +44,5 @@ public class Transaksi {
     // Method untuk mendapatkan akun customer
     public Customer getAkun() {
         return akun;
-    }
-    
-    // Method untuk mencetak detail transaksi
-    public void cetakDetail() {
-        System.out.println("Detail Transaksi:");
-        System.out.println("Customer: " + akun.getId());
-        if (barang.isEmpty()) {
-            System.out.println("Tidak ada barang dalam transaksi.");
-        } else {
-            for (Barang item : barang) {
-                System.out.println("- " + item.getNama() + " | Harga: " + item.getHarga());
-            }
-            System.out.println("Total Transaksi: " + hitungTotal());
-        }
     }
 }
