@@ -9,5 +9,18 @@ public abstract class Akun {
         this.password = password;
     }
 
+    // Getter methods
+    public String getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     public abstract boolean login(String username, String password);
 }
