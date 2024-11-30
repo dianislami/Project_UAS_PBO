@@ -1,25 +1,41 @@
 import java.util.List;
 import java.util.Scanner;
 
-public class CustomerDrive {
+public class CustomerDrive extends Driver {
     private Customer customer;
-    private List<Product> allProducts;
+    private Transaksi transaksi; // Add transaksi instance
+    private ListBarang listBarang;
+    private Invoice invoice;
 
-    // Constructor to initialize Customer object and all products list
-    public CustomerDrive(Customer customer, List<Product> allProducts) {
-        this.customer = customer; // Ensure customer is passed correctly
-        this.allProducts = allProducts; // List of all products
+    public CustomerDrive(Customer customer, ListBarang listBarang) {
+        this.customer = customer;
+        this.listBarang = listBarang;
+        this.transaksi = new Transaksi(customer);
+        listBarang.muatDataDariFile();
     }
 
+    @Override
+    public Customer login(String username, String password, List<Akun> accounts) {
+        for (Akun akun : accounts) {
+            if (akun instanceof Customer && akun.getUsername().equals(username) && akun.getPassword().equals(password)) {
+                return (Customer) akun;
+            }
+        }
+        return null; // Jika login gagal
+    }
+
+    @Override
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenu Customer:");
             System.out.println("1. Lihat Barang");
             System.out.println("2. Tambah ke Keranjang");
-            System.out.println("3. Lihat Keranjang");
-            System.out.println("4. Checkout");
-            System.out.println("5. Logout");
+            System.out.println("3. Hapus Barang dari Keranjang");
+            System.out.println("4. Lihat Keranjang");
+            System.out.println("5. Checkout");
+            System.out.println("6. Lihat Riwayat Transaksi");
+            System.out.println("7. Logout");
             System.out.print("Pilih: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -27,18 +43,21 @@ public class CustomerDrive {
             switch (choice) {
                 case 1:
                     System.out.println("Daftar Barang:");
-                    customer.viewProducts(allProducts);  // Pass all products list
+                    listBarang.muatDataDariFile();
+                    customer.viewBarang(listBarang.getBarang());
                     break;
                 case 2:
                     System.out.print("Masukkan ID Barang: ");
-                    String addId = scanner.nextLine();
-                    Product product = findProductById(addId);
-                    if (product != null) {
-                        System.out.print("Masukkan jumlah barang: ");
-                        int quantity = scanner.nextInt();
+                    String idBarang = scanner.nextLine();
+                    Barang barang = listBarang.cariBarang(idBarang); // Cari barang di ListBarang
+                    if (barang != null) {
+                        System.out.print("Masukkan jumlah: ");
+                        int jumlah = scanner.nextInt();
                         scanner.nextLine();
-                        if (quantity > 0 && quantity <= product.getStock()) {
-                            customer.addToCart(product, quantity);
+                        if (jumlah > 0 && jumlah <= barang.getStokBarang()) {
+                            customer.addToCart(barang, jumlah);
+                            transaksi.tambahBarang(barang, jumlah); // Tambahkan ke transaksi
+                            listBarang.simpanDataKeFile(); // Kurangi stok di ListBarang
                         } else {
                             System.out.println("Jumlah barang tidak valid atau stok tidak mencukupi.");
                         }
@@ -47,27 +66,30 @@ public class CustomerDrive {
                     }
                     break;
                 case 3:
-                    customer.viewCart();
+                    System.out.print("Masukkan ID Barang yang akan dihapus: ");
+                    String idBarangHapus = scanner.nextLine();
+                    customer.removeFromCart(idBarangHapus); // Hapus barang dari keranjang
                     break;
                 case 4:
-                    customer.checkout();
+                    System.out.println("Isi Keranjang:");
+                    customer.viewCart(); // Tampilkan isi keranjang
                     break;
                 case 5:
+                    System.out.println("Melakukan Checkout...");
+                    customer.checkout(); // Lakukan proses checkout
+                    listBarang.simpanDataKeFile(); // Print transaction details
+                    break;
+                case 6:
+                    System.out.println("Riwayat Transaksi:");
+                    invoice.bacaDariFile("invoices.txt");
+                    break;
+                case 7:
                     System.out.println("Logout berhasil.");
                     return;
                 default:
                     System.out.println("Pilihan tidak valid.");
+                    break;
             }
         }
-    }
-
-    // Method to find product by ID
-    private Product findProductById(String id) {
-        for (Product product : allProducts) {
-            if (product.getId().equals(id)) {
-                return product;
-            }
-        }
-        return null;
     }
 }
