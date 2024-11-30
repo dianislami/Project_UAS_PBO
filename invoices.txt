@@ -1,0 +1,9 @@
+======== INVOICE ========
+Nomor Transaksi: T-1
+Tanggal dan Waktu: 2024-11-30 18:33:26
+Customer: 2
+Daftar Barang:
+- Kopi Hitam | Harga: Rp15000.0
+Total Bayar: Rp15000.0
+Metode Pembayaran: COD
+=========================
