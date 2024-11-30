@@ -82,7 +82,7 @@ public class CustomerDrive extends Driver {
                 }
                 case 6 -> {
                     System.out.println("Riwayat Transaksi:");
-                    invoice.bacaDariFile("invoices.txt");
+                    invoice.bacaDariFile("C:\\Users\\asusa\\OneDrive\\Documents\\java\\uas\\customer\\" + transaksi.getAkun().getUsername() + "\\transaksi.txt");
                 }
                 case 7 -> {
                     System.out.println("Logout berhasil.");
