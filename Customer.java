@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Customer extends Akun {
-    private List<CartItem> cart;
+    private Keranjang keranjang;
+    private ArrayList<Invoice> invoiceSelesai;
 
     public Customer(String id, String username, String password) {
         super(id, username, password);
-        this.cart = new ArrayList<>();
+        this.keranjang = new Keranjang();
+        this.invoiceSelesai = new ArrayList<>();
     }
 
     @Override
@@ -14,65 +17,118 @@ public class Customer extends Akun {
         return this.username.equals(username) && this.password.equals(password);
     }
 
-    public void viewProducts(List<Product> products) {
-        if (products.isEmpty()) {
+    public void viewBarang(List<Barang> barangList) {
+        if (barangList.isEmpty()) {
             System.out.println("Tidak ada barang tersedia.");
         } else {
             System.out.println("+----+---------------+---------+-------+");
             System.out.println("| ID | Nama Barang   | Harga   | Stok  |");
             System.out.println("+----+---------------+---------+-------+");
-            for (Product product : products) {
+            for (Barang barang : barangList) {
                 System.out.printf("| %-2s | %-13s | %-7.0f | %-5d |\n",
-                        product.getId(), product.getName(), product.getPrice(), product.getStock());
+                        barang.getIdBarang(), barang.getNamaBarang(), barang.getHargaBarang(), barang.getStokBarang());
             }
             System.out.println("+----+---------------+---------+-------+");
         }
     }
 
-    public void addToCart(Product product, int quantity) {
-        if (product.getStock() >= quantity) {
-            product.reduceStock(quantity); // Kurangi stok barang
-            cart.add(new CartItem(product, quantity));
-            System.out.println(quantity + " unit " + product.getName() + " berhasil ditambahkan ke keranjang.");
-        } else {
-            System.out.println("Stok tidak mencukupi untuk jumlah yang diminta.");
-        }
+    public void addToCart(Barang barang, int quantity) {
+        keranjang.tambahBarang(barang, quantity);
     }
 
-    public void removeFromCart(String productId) {
-        boolean removed = false;
-        for (int i = 0; i < cart.size(); i++) {
-            if (cart.get(i).getProduct().getId().equals(productId)) {
-                cart.get(i).getProduct().increaseStock(cart.get(i).getQuantity()); // Kembalikan stok barang
-                cart.remove(i); // Hapus barang dari keranjang
-                removed = true;
-                break;
-            }
-        }
-        if (removed) {
-            System.out.println("Barang dengan ID " + productId + " berhasil dihapus dari keranjang.");
-        } else {
-            System.out.println("Barang dengan ID " + productId + " tidak ditemukan di keranjang.");
-        }
-    }
-
-    public void checkout() {
-        double total = 0;
-        for (CartItem item : cart) {
-            total += item.getProduct().getPrice() * item.getQuantity();
-        }
-        System.out.println("Checkout berhasil. Total pembayaran: Rp " + total);
-        cart.clear(); // Kosongkan keranjang
+    public void removeFromCart(String id) {
+        keranjang.hapusBarang(id);
     }
 
     public void viewCart() {
-        if (cart.isEmpty()) {
-            System.out.println("Keranjang kosong.");
-        } else {
-            System.out.println("\nIsi Keranjang:");
-            for (CartItem item : cart) {
-                System.out.println(item);
+        keranjang.tampilkanBarang();
+    }
+
+    public void checkout() {
+        if (keranjang.getBarang().isEmpty()) {
+            System.out.println("Keranjang kosong. Tidak dapat melakukan checkout.");
+            return;
+        }
+
+        keranjang.tampilkanBarang();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\nPilih barang yang ingin di-checkout (pisahkan dengan koma, contoh: 1,3):");
+        System.out.print("Pilihan Anda: ");
+        String pilihanInput = scanner.nextLine();
+        String[] pilihanArray = pilihanInput.split(",");
+
+        List<Barang> barangUntukCheckout = new ArrayList<>();
+        for (String id : pilihanArray) {
+            Barang barangDipilih = null;
+            for (Barang item : keranjang.getBarang()) {
+                if (item.getIdBarang().equalsIgnoreCase(id.trim())) {
+                    barangDipilih = item;
+                    break;
+                }
+            }
+            if (barangDipilih != null) {
+                barangUntukCheckout.add(barangDipilih);
+            } else {
+                System.out.println("Barang dengan ID " + id.trim() + " tidak ditemukan di keranjang. Dilewati.");
             }
         }
+
+        if (barangUntukCheckout.isEmpty()) {
+            System.out.println("Tidak ada barang yang dipilih untuk checkout. Proses dibatalkan.");
+            return;
+        }
+
+        // Hitung total pembayaran dengan diskon
+        double total = 0;
+        for (Barang item : barangUntukCheckout) {
+            total += item.getHargaBarang() * item.getStokBarang();
+        }
+        total = total - (total * keranjang.getDiskon() / 100); // Apply discount
+
+        // Tampilkan total setelah diskon
+        System.out.println("Total pembayaran setelah diskon: Rp" + total);
+
+        System.out.println("\nPilih metode pembayaran:");
+        System.out.println("1. QRIS");
+        System.out.println("2. COD");
+        System.out.println("3. Bank");
+        System.out.print("Pilihan Anda: ");
+        int pilihan = scanner.nextInt();
+        scanner.nextLine();
+
+        Pembayaran pembayaran = null;
+        switch (pilihan) {
+            case 1:
+                pembayaran = new QRIS("QRIS-" + System.currentTimeMillis());
+                break;
+            case 2:
+                pembayaran = new COD("COD-" + System.currentTimeMillis());
+                break;
+            case 3:
+                pembayaran = new Bank("BANK-" + System.currentTimeMillis());
+                break;
+            default:
+                System.out.println("Metode pembayaran tidak valid. Checkout dibatalkan.");
+                return;
+        }
+
+        // Buat transaksi dan invoice
+        Transaksi transaksi = new Transaksi(this);
+        for (Barang item : barangUntukCheckout) {
+            transaksi.tambahBarang(item, item.getStokBarang());
+        }
+
+        Invoice invoice = new Invoice(transaksi, pembayaran, total);
+
+        // Cetak invoice dan proses pembayaran
+        invoice.cetakInvoice();
+        pembayaran.prosesPembayaran();
+
+        invoiceSelesai.add(invoice);
+
+        keranjang.getBarang().removeAll(barangUntukCheckout);
+        keranjang.simpanKeFile();
+        System.out.println("\nCheckout berhasil. Keranjang telah dikosongkan.");
     }
 }
