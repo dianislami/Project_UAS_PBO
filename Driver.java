@@ -1,12 +1,6 @@
+import java.util.List;
+
 public abstract class Driver {
-    // Menentukan akun yang digunakan (Customer atau Admin)
-    protected Akun akun;
-
-    // Konstruktor untuk menginisialisasi akun
-    public Driver(Akun akun) {
-        this.akun = akun;
-    }
-
-    // Metode abstract untuk memulai proses
-    public abstract void start();
+    public abstract void start(); // Metode abstrak yang akan diimplementasikan oleh subclass
+    public abstract Akun login(String username, String password, List<Akun> accounts);
 }
