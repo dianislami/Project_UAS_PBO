@@ -15,7 +15,7 @@ public class Customer extends Akun {
 
     public Customer(String id, String username, String password) {
         super(id, username, password);
-        this.keranjang = new Keranjang();
+        this.keranjang = new Keranjang(username);
         this.invoiceSelesai = new ArrayList<>();
     }
 
@@ -94,6 +94,10 @@ public class Customer extends Akun {
         for (Barang item : barangUntukCheckout) {
             total += item.getHargaBarang() * item.getStokBarang();
         }
+        total = total - (total * keranjang.getDiskon() / 100); // Apply discount
+
+        // Tampilkan total setelah diskon
+        System.out.println("Total pembayaran setelah diskon: Rp" + total);
 
         // Meminta pengguna memilih metode pembayaran
         System.out.println("\nPilih metode pembayaran:");
@@ -126,7 +130,7 @@ public class Customer extends Akun {
             transaksi.tambahBarang(item, item.getStokBarang());
         }
 
-        Invoice invoice = new Invoice(transaksi, pembayaran);
+        Invoice invoice = new Invoice(transaksi, pembayaran, total);
 
         // Cetak invoice dan proses pembayaran
         invoice.cetakInvoice();
