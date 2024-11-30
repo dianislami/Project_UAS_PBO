@@ -57,11 +57,52 @@ public class Main {
                 Admin admin = (Admin) akun; // Casting eksplisit
                 new AdminDrive(admin).start(); // Menu Admin
             } else if (akun instanceof Customer) {
-                Customer customer = (Customer) akun; // Casting eksplisit
+                Customer customer = (Customer) akun; 
+                createCustomerFolder(customer);
                 new CustomerDrive(customer, new ListBarang()).start();
             }
         } else {
             System.out.println("Login gagal! Periksa username dan password.");
+        }
+    }
+
+    private static void createCustomerFolder(Customer customer) {
+        // Membuat folder "customer" jika belum ada
+        File customerFolder = new File("customer");
+        if (!customerFolder.exists()) {
+            customerFolder.mkdir();
+        }
+
+        // Membuat folder untuk customer yang login berdasarkan username atau ID
+        File customerDir = new File(customerFolder, customer.getUsername());
+        if (!customerDir.exists()) {
+            customerDir.mkdir();  // Membuat folder khusus untuk customer ini
+            System.out.println("Folder customer " + customer.getUsername() + " dibuat.");
+
+            // Membuat file keranjang.txt dan transaksi.txt di dalam folder customer
+            createCustomerFiles(customerDir);
+        }
+    }
+
+    private static void createCustomerFiles(File customerDir) {
+        try {
+            // Membuat file keranjang.txt
+            File keranjangFile = new File(customerDir, "keranjang.txt");
+            if (!keranjangFile.exists()) {
+                keranjangFile.createNewFile(); // Membuat file baru jika belum ada
+                System.out.println("File keranjang.txt untuk customer berhasil dibuat.");
+                System.out.println("Path file: " + keranjangFile.getAbsolutePath());
+            }
+
+            // Membuat file transaksi.txt
+            File transaksiFile = new File(customerDir, "transaksi.txt");
+            if (!transaksiFile.exists()) {
+                transaksiFile.createNewFile(); // Membuat file baru jika belum ada
+                System.out.println("File transaksi.txt untuk customer berhasil dibuat.");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Gagal membuat file untuk customer: " + e.getMessage());
         }
     }
 
@@ -144,8 +185,6 @@ public class Main {
                 String[] data = line.split(",");
                 accounts.add(new Customer(data[0], data[1], data[2]));
             }
-
-        
 
         } catch (FileNotFoundException e) {
             System.out.println("File tidak ditemukan. Sistem akan membuat file baru saat menyimpan.");
