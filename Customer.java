@@ -24,14 +24,14 @@ public class Customer extends Akun {
         if (barangList.isEmpty()) {
             System.out.println("Tidak ada barang tersedia.");
         } else {
-            System.out.println("+----+---------------+---------+-------+");
-            System.out.println("| ID | Nama Barang   | Harga   | Stok  |");
-            System.out.println("+----+---------------+---------+-------+");
+            System.out.println("+------+-------------------------+--------------+----------+");
+            System.out.println("|  ID  |       Nama Barang       |     Harga    |   Stok   |");
+            System.out.println("+------+-------------------------+--------------+----------+");
             for (Barang barang : barangList) {
-                System.out.printf("| %-2s | %-13s | %-7.0f | %-5d |\n",
+                System.out.printf("| %-4s | %-23s | %-12.0f | %-8d |\n",
                         barang.getIdBarang(), barang.getNamaBarang(), barang.getHargaBarang(), barang.getStokBarang());
             }
-            System.out.println("+----+---------------+---------+-------+");
+            System.out.println("+------+-------------------------+--------------+----------+");
         }
     }
 
@@ -61,8 +61,8 @@ public class Customer extends Akun {
 
         // Minta pengguna memilih barang yang ingin di-checkout
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\nPilih barang yang ingin di-checkout (pisahkan dengan koma, contoh: 1,3):");
-        System.out.print("Pilihan Anda: ");
+        System.out.println("\nMasukkan ID barang yang ingin di checkout:");
+        System.out.print("ID Barang: ");
         String pilihanInput = scanner.nextLine();
         String[] pilihanArray = pilihanInput.split(",");
 
@@ -88,16 +88,6 @@ public class Customer extends Akun {
             System.out.println("Tidak ada barang yang dipilih untuk checkout. Proses dibatalkan.");
             return;
         }
-
-        // Hitung total pembayaran
-        double total = 0;
-        for (Barang item : barangUntukCheckout) {
-            total += item.getHargaBarang() * item.getStokBarang();
-        }
-        total = total - (total * keranjang.getDiskon() / 100); // Apply discount
-
-        // Tampilkan total setelah diskon
-        System.out.println("Total pembayaran setelah diskon: Rp" + total);
 
         // Meminta pengguna memilih metode pembayaran
         System.out.println("\nPilih metode pembayaran:");
@@ -130,7 +120,7 @@ public class Customer extends Akun {
             transaksi.tambahBarang(item, item.getStokBarang());
         }
 
-        Invoice invoice = new Invoice(transaksi, pembayaran, total);
+        Invoice invoice = new Invoice(transaksi, pembayaran);
 
         // Cetak invoice dan proses pembayaran
         invoice.cetakInvoice();
@@ -142,6 +132,6 @@ public class Customer extends Akun {
         // Kosongkan barang yang di-checkout dari keranjang
         keranjang.getBarang().removeAll(barangUntukCheckout);
         keranjang.simpanKeFile();
-        System.out.println("\nCheckout berhasil. Keranjang telah dikosongkan.");
+        System.out.println("\nCheckout berhasil^^");
     }
 }
