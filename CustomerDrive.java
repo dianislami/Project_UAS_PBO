@@ -29,8 +29,13 @@ public class CustomerDrive extends Driver {
     public void start() {
         // Menu utama untuk customer
         Scanner scanner = new Scanner(System.in);
+        System.out.println("=============================");
+        System.out.println("Anda login sebagaim Customer.");
+        System.out.println("=============================\n");
         while (true) {
-            System.out.println("\nMenu Customer:");
+            System.out.println("------------------------------");
+            System.out.println("        Menu Customer");
+            System.out.println("------------------------------");
             System.out.println("1. Lihat Barang");
             System.out.println("2. Tambah ke Keranjang");
             System.out.println("3. Hapus Barang dari Keranjang");
@@ -38,6 +43,7 @@ public class CustomerDrive extends Driver {
             System.out.println("5. Checkout");
             System.out.println("6. Lihat Riwayat Transaksi");
             System.out.println("7. Logout");
+            System.out.println("------------------------------");
             System.out.print("Pilih: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -49,6 +55,9 @@ public class CustomerDrive extends Driver {
                     customer.viewBarang(listBarang.getBarang());
                 }
                 case 2 -> { // Menambahkan barang ke keranjang
+                    System.out.println("Daftar Barang:");
+                    listBarang.muatDataDariFile();
+                    customer.viewBarang(listBarang.getBarang());
                     System.out.print("Masukkan ID Barang: ");
                     String idBarang = scanner.nextLine();
                     Barang barang = listBarang.cariBarang(idBarang); // Cari barang di ListBarang
@@ -68,19 +77,18 @@ public class CustomerDrive extends Driver {
                     }
                 }
                 case 3 -> { // Menghapus barang dari keranjang
+                    customer.viewCart();
                     System.out.print("Masukkan ID Barang yang akan dihapus: ");
                     String idBarang = scanner.nextLine();
                     customer.removeFromCart(idBarang); // Hapus barang dari keranjang
                 }
                 case 4 -> { // Menampilkan isi keranjang
-                    System.out.println("Isi Keranjang:");
                     customer.viewCart(); // Tampilkan isi keranjang
                 }
                 case 5 -> { // Melakukan proses checkout
                     System.out.println("Melakukan Checkout...");
                     customer.checkout(); // Lakukan proses checkout
-                    listBarang.simpanDataKeFile(); // Print transaction details
-                    // Here you can add the payment option to complete the transaction
+                    listBarang.simpanDataKeFile();
                 }
                 case 6 -> { // Menampilkan riwayat transaksi
                     System.out.println("Riwayat Transaksi:");
