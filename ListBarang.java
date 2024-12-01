@@ -61,14 +61,14 @@ public class ListBarang {
         if (barang.isEmpty()) {
             System.out.println("Tidak ada barang dalam daftar.");
         } else {
-            System.out.println("+----+---------------+---------+-------+");
-            System.out.println("| ID | Nama Barang   | Harga   | Stok  |");
-            System.out.println("+----+---------------+---------+-------+");
+            System.out.println("+------+-------------------------+--------------+----------+");
+            System.out.println("|  ID  |       Nama Barang       |     Harga    |   Stok   |");
+            System.out.println("+------+-------------------------+--------------+----------+");
             for (Barang item : barang) {
-                System.out.printf("| %-2s | %-13s | %-7.0f | %-5d |\n",
+                System.out.printf("| %-4s | %-23s | %-12.0f | %-8d |\n",
                         item.getIdBarang(), item.getNamaBarang(), item.getHargaBarang(), item.getStokBarang());
             }
-            System.out.println("+----+---------------+---------+-------+");
+            System.out.println("+------+-------------------------+--------------+----------+");
         }
     }
 
