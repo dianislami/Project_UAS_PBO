@@ -109,7 +109,6 @@ public class Barang {
                              barang.getStokBarang());
                 writer.newLine();
             }
-            System.out.println("Data barang berhasil disimpan ke file.");
         } catch (IOException e) {
             System.out.println("Terjadi kesalahan saat menyimpan data barang: " + e.getMessage());
         }
@@ -130,7 +129,6 @@ public class Barang {
                     daftarBarang.add(new Barang(idBarang, namaBarang, hargaBarang, stokBarang));
                 }
             }
-            System.out.println("Data barang berhasil dibaca dari file.");
         } catch (FileNotFoundException e) {
             System.out.println("File tidak ditemukan. Tidak ada data yang dibaca.");
         } catch (IOException e) {
