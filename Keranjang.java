@@ -11,24 +11,12 @@ import java.util.List;
 public class Keranjang {
     private ArrayList<Barang> barang;
     private String customerUsername;
-    private double diskon;
 
     // Constructor untuk membuat keranjang berdasarkan username customer
     public Keranjang(String customerUsername) {
         this.customerUsername = customerUsername;
         this.barang = new ArrayList<>();
-        this.diskon = 0;
         muatDariFile(); // Muat data keranjang dari file saat objek dibuat
-    }
-
-    // Method untuk menetapkan diskon
-    public void setDiskon(double diskon) {
-        if (diskon >= 0 && diskon <= 100) {
-            this.diskon = diskon;
-            System.out.println("Diskon sebesar " + diskon + "% berhasil diterapkan.");
-        } else {
-            System.out.println("Diskon harus antara 0% dan 100%.");
-        }
     }
 
     // Method untuk menambahkan barang ke keranjang
@@ -76,41 +64,31 @@ public class Keranjang {
         System.out.println("Barang dengan ID " + id + " tidak ditemukan di keranjang.");
     }
 
-    // Method untuk menghitung total harga barang dalam keranjang (termasuk diskon)
-    public double hitungTotal() {
-        double total = 0;
-        for (Barang item : barang) {
-            total += item.getHargaBarang() * item.getStokBarang(); // Hitung total harga berdasarkan jumlah barang
-        }
-        return total - (total * diskon / 100); // Kurangi dengan diskon
-    }
-
-    // Method untuk menampilkan total harga setelah diskon
-    public void tampilkanTotal() {
-        System.out.println("Total harga setelah diskon: Rp" + hitungTotal());
-    }
-
     // Method untuk menampilkan barang dalam keranjang
     public void tampilkanBarang() {
         if (barang.isEmpty()) {
             System.out.println("Keranjang kosong.");
         } else {
-            System.out.println("Daftar barang dalam keranjang:");
+            // Header Tabel
+            System.out.println("\n==================== DAFTAR BARANG KERANJANG ====================");
+            System.out.println(String.format("%-10s | %-24s | %-16s | %-10s", "ID Barang", "Nama Barang", "Harga", "Jumlah"));
+            System.out.println("-----------+--------------------------+------------------+-------");
+            
+            // Daftar barang
             for (Barang item : barang) {
-                System.out.println(item.getIdBarang() + "| " + item.getNamaBarang() + " | Harga: Rp" + item.getHargaBarang() +
-                                   " | Jumlah: " + item.getStokBarang());
+                System.out.printf("%-10s | %-24s | Rp%-14.0f | %-10d\n",
+                        item.getIdBarang(),
+                        item.getNamaBarang(),
+                        item.getHargaBarang(),
+                        item.getStokBarang());
             }
+            System.out.println("=================================================================");
         }
     }
 
     // Getter untuk mendapatkan daftar barang dalam keranjang
     public ArrayList<Barang> getBarang() {
         return barang;
-    }
-
-    // Getter untuk mendapatkan diskon yang diterapkan
-    public double getDiskon() {
-        return this.diskon;
     }
 
     // Method untuk menyimpan keranjang ke file
@@ -124,7 +102,6 @@ public class Keranjang {
                              item.getStokBarang());
                 writer.newLine();
             }
-            System.out.println("Data keranjang berhasil disimpan ke keranjang.txt");
         } catch (IOException e) {
             System.out.println("Gagal menyimpan data keranjang: " + e.getMessage());
         }
@@ -144,7 +121,6 @@ public class Keranjang {
                     barang.add(new Barang(id, nama, harga, stok));
                 }
             }
-            System.out.println("Data keranjang berhasil dimuat dari file.");
         } catch (FileNotFoundException e) {
             System.out.println("File keranjang.txt tidak ditemukan. Memulai dengan keranjang kosong.");
         } catch (IOException e) {
