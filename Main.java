@@ -1,21 +1,19 @@
 import java.io.*;
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static List<Akun> accounts = new ArrayList<>();
-    private static List<Barang> barangList = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
-    private static Akun akun; // Menyimpan akun yang sedang login
-    private static DriverAkun driverAkun = new DriverAkun();
-    private static String file = "barang_data.txt";
+    private static List<Akun> accounts = new ArrayList<>(); // List untuk menyimpan data akun
+    private static Scanner scanner = new Scanner(System.in); // Scanner untuk input pengguna
+    private static Akun akun; // // Menyimpan akun yang sedang login
+    private static DriverAkun driverAkun = new DriverAkun(); // Driver untuk operasi terkait akun
 
     public static void main(String[] args) {
         
         loadData(); // Memuat data dari file teks saat program dimulai
 
+        // Loop utama untuk menu
         while (true) {
             System.out.println("\nSelamat datang di Sistem Belanja Online!");
             System.out.println("1. Login");
@@ -27,21 +25,22 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    login();
+                    login(); // Panggil method login
                     break;
                 case 2:
-                    createAccount();
+                    createAccount(); // Panggil method untuk membuat akun
                     break;
                 case 3:
                     saveData(); // Menyimpan data sebelum keluar
                     System.out.println("Terima kasih telah menggunakan sistem ini.");
-                    System.exit(0);
+                    System.exit(0); // Keluar dari program
                 default:
                     System.out.println("Pilihan tidak valid.");
             }
         }
     }
 
+    // Method untuk login ke sistem
     private static void login() {
         System.out.print("\nMasukkan username: ");
         String username = scanner.nextLine();
@@ -53,19 +52,20 @@ public class Main {
 
         if (akun != null) {
             System.out.println("Login berhasil!");
-            if (akun instanceof Admin) {
+            if (akun instanceof Admin) { // Jika akun adalah admin, buka menu admin
                 Admin admin = (Admin) akun; // Casting eksplisit
                 new AdminDrive(admin).start(); // Menu Admin
-            } else if (akun instanceof Customer) {
+            } else if (akun instanceof Customer) { // Jika akun adalah customer, buka menu customer
                 Customer customer = (Customer) akun; 
-                createCustomerFolder(customer);
-                new CustomerDrive(customer, new ListBarang()).start();
+                createCustomerFolder(customer); // Membuat folder customer jika belum ada
+                new CustomerDrive(customer, new ListBarang()).start(); // Menu Customer
             }
         } else {
             System.out.println("Login gagal! Periksa username dan password.");
         }
     }
 
+    // Method untuk membuat folder dan file khusus customer
     private static void createCustomerFolder(Customer customer) {
         // Membuat folder "customer" jika belum ada
         File customerFolder = new File("customer");
@@ -84,6 +84,7 @@ public class Main {
         }
     }
 
+    // Method untuk membuat file keranjang.txt dan transaksi.txt untuk customer
     private static void createCustomerFiles(File customerDir) {
         try {
             // Membuat file keranjang.txt
@@ -106,6 +107,7 @@ public class Main {
         }
     }
 
+    // Method untuk membuat akun baru
     private static void createAccount() {
         System.out.print("\nMasukkan username: ");
         String username = scanner.nextLine();
@@ -116,33 +118,23 @@ public class Main {
         scanner.nextLine(); // Bersihkan buffer
     
         Akun newAccount;
-        if (type == 1) {
+        if (type == 1) { // Membuat akun admin
             newAccount = new Admin(String.valueOf(accounts.size() + 1), username, password);
-        } else if (type == 2) {
+        } else if (type == 2) { // Membuat akun customer
             newAccount = new Customer(String.valueOf(accounts.size() + 1), username, password);
         } else {
             System.out.println("Pilihan tidak valid. Akun tidak dibuat.");
             return;
         }
-        accounts.add(newAccount);
+        accounts.add(newAccount); // Menambahkan akun ke daftar akun
         saveData(); // Panggil saveData() setelah akun dibuat
         System.out.println("Akun berhasil dibuat! Silakan login.");
     }
     
-
-    private static Barang findBarangById(String id) {
-        for (Barang barang : barangList) {
-            if (barang.getIdBarang().equals(id)) {
-                return barang;
-            }
-        }
-        return null;
-    }
-
-    // Memastikan bahwa barangList sudah terisi sebelum memanggil simpanKeFile
+    // Method untuk menyimpan data ke file
     private static void saveData() {
         try {
-            // Simpan data Admin, Customer, dan Barang ke file terpisah
+            // Simpan data Admin & Customer ke file terpisah
             try (BufferedWriter adminWriter = new BufferedWriter(new FileWriter("admin_data.txt"));
                  BufferedWriter customerWriter = new BufferedWriter(new FileWriter("customer_data.txt"))) {
 
@@ -152,6 +144,7 @@ public class Main {
                         Admin admin = (Admin) account;
                         adminWriter.write(admin.getId() + "," + admin.getUsername() + "," + admin.getPassword() + "\n");
                     } else if (account instanceof Customer) {
+                        // Simpan Customer ke file customer_data.txt
                         Customer customer = (Customer) account;
                         customerWriter.write(customer.getId() + "," + customer.getUsername() + "," + customer.getPassword() + "\n");
                     }
@@ -164,12 +157,11 @@ public class Main {
             System.out.println("Gagal menyimpan data: " + e.getMessage());
         }
     }
-    
 
-    // Membaca data akun dan barang dari file teks terpisah
+    // Method untuk memuat data dari file
     private static void loadData() {
         try {
-            // Membaca data Admin, Customer, dan Barang dari file terpisah
+            // Membaca data Admin & Customer dari file terpisah
             BufferedReader adminReader = new BufferedReader(new FileReader("admin_data.txt"));
             BufferedReader customerReader = new BufferedReader(new FileReader("customer_data.txt"));
             String line;
