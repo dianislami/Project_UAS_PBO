@@ -13,14 +13,15 @@ public class Keranjang {
     private String customerUsername;
     private double diskon;
 
+    // Constructor untuk membuat keranjang berdasarkan username customer
     public Keranjang(String customerUsername) {
         this.customerUsername = customerUsername;
         this.barang = new ArrayList<>();
         this.diskon = 0;
-        muatDariFile();
+        muatDariFile(); // Muat data keranjang dari file saat objek dibuat
     }
 
-    // Method for applying discount
+    // Method untuk menetapkan diskon
     public void setDiskon(double diskon) {
         if (diskon >= 0 && diskon <= 100) {
             this.diskon = diskon;
@@ -36,17 +37,17 @@ public class Keranjang {
         for (Barang b : barang) {
             if (b.getIdBarang().equals(item.getIdBarang())) {
                 // Jika ada, tambahkan jumlah barang yang ada
-                item.kurangiStok(jumlah);
-                b.tambahStok(jumlah);
+                item.kurangiStok(jumlah); // Kurangi stok barang di inventori
+                b.tambahStok(jumlah); // Tambahkan stok barang di keranjang
                 System.out.println(jumlah + " unit " + item.getNamaBarang() + " ditambahkan ke keranjang. Total jumlah: " + b.getStokBarang());
-                simpanKeFile();
+                simpanKeFile(); // Simpan data keranjang ke file
                 return;
             }
         }
         if (item.kurangiStok(jumlah)) { // Kurangi stok jika cukup
             barang.add(new Barang(item.getIdBarang(), item.getNamaBarang(), item.getHargaBarang(), jumlah));
             System.out.println(jumlah + " unit " + item.getNamaBarang() + " ditambahkan ke keranjang.");
-            simpanKeFile();
+            simpanKeFile(); // Simpan data keranjang ke file
         } else {
             System.out.println("Gagal menambahkan barang ke keranjang. Stok tidak mencukupi.");
         }
@@ -57,6 +58,7 @@ public class Keranjang {
     public void hapusBarang(String id) {
         for (Barang b : barang) {
             if (b.getIdBarang().equals(id)) {
+                // Cari barang yang cocok di daftar barang utama untuk menambah stok kembali
                 List<Barang> daftarBarangUtama = Barang.bacaDataBarang(); // Baca data dari barang.txt
                 for (Barang barangUtama : daftarBarangUtama) {
                     if (barangUtama.getIdBarang().equals(id)) {
@@ -65,25 +67,25 @@ public class Keranjang {
                         break;
                     }
                 }
-                barang.remove(b);
+                barang.remove(b); // Hapus barang dari keranjang
                 System.out.println(b.getNamaBarang() + " dihapus dari keranjang.");
-                simpanKeFile();
+                simpanKeFile(); // Simpan perubahan ke file
                 return;
             }
         }
         System.out.println("Barang dengan ID " + id + " tidak ditemukan di keranjang.");
     }
 
-    // Method to calculate total price with quantity and discount
+    // Method untuk menghitung total harga barang dalam keranjang (termasuk diskon)
     public double hitungTotal() {
         double total = 0;
         for (Barang item : barang) {
-            total += item.getHargaBarang() * item.getStokBarang(); // Quantity affects total price
+            total += item.getHargaBarang() * item.getStokBarang(); // Hitung total harga berdasarkan jumlah barang
         }
-        return total - (total * diskon / 100); // Apply discount
+        return total - (total * diskon / 100); // Kurangi dengan diskon
     }
 
-    // Display total after discount
+    // Method untuk menampilkan total harga setelah diskon
     public void tampilkanTotal() {
         System.out.println("Total harga setelah diskon: Rp" + hitungTotal());
     }
@@ -101,11 +103,12 @@ public class Keranjang {
         }
     }
 
+    // Getter untuk mendapatkan daftar barang dalam keranjang
     public ArrayList<Barang> getBarang() {
         return barang;
     }
 
-    // Getter for diskon
+    // Getter untuk mendapatkan diskon yang diterapkan
     public double getDiskon() {
         return this.diskon;
     }
@@ -127,6 +130,7 @@ public class Keranjang {
         }
     }
 
+    // Method untuk memuat data keranjang dari file
     public void muatDariFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\asusa\\OneDrive\\Documents\\java\\uas\\customer\\" + customerUsername + "\\keranjang.txt"))) {
             String line;
