@@ -1,6 +1,6 @@
 public class COD extends Pembayaran {
     public COD(String id) {
-        super(id);
+        super(id); // Memanggil constructor dari kelas induk (Pembayaran) untuk mengatur ID pembayaran
     }
 
     @Override
@@ -9,6 +9,7 @@ public class COD extends Pembayaran {
     }
 
     @Override
+    // Menampilkan informasi proses pembayaran menggunakan metode COD
     public void prosesPembayaran() {
         System.out.println("Pembayaran dilakukan melalui COD dengan ID: " + id);
         System.out.println("Silakan serahkan pembayaran ke kurir saat barang diterima.");
