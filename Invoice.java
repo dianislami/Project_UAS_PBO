@@ -12,7 +12,7 @@ public class Invoice {
     private Pembayaran pembayaran; // Metode pembayaran yang digunakan
     private double totalBayar; // Total yang harus dibayar
     private int nomorTransaksi = 101; // Nomor transaksi unik
-    private String tanggalWaktu;
+    private String tanggalWaktu; //Menampilkan tanggal dan waktu teransaksi dibuat
 
     // Constructor
     public Invoice(Transaksi transaksi, Pembayaran pembayaran, double totalBayar) {
