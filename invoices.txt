@@ -1,0 +1,220 @@
+
+[1m======== INVOICE ========[0m
+           INVOICE TRANSAKSI
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:17:28 
+Customer            : 1                   
+Nama Barang               | Harga     
+-------------------------+-----------
+penggaris                 | Rp5000      
+-------------------------+-----------
+Total Bayar              : Rp5000      
+Metode Pembayaran        : QRIS      
+[1m=========================[0m
+           INVOICE TRANSAKSI
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:26:42 
+Customer            : 1                   
+Nama Barang          | Harga     
+----------------------+-----------
+pulpen               | Rp4000      
+----------------------+-----------
+Total Bayar         : Rp4000      
+Metode Pembayaran   : COD       
+===============================
+      =====INVOICE TRANSAKSI=====
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:28:50 
+Customer            : 1                   
+Nama Barang         | Harga     
+--------------------+-----------
+pulpen               | Rp4000      
+--------------------+-----------
+Total Bayar         : Rp4000      
+Metode Pembayaran   : Bank      
+=================================
+
+   ========INVOICE TRANSAKSI========
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:31:36 
+Customer            : 1                   
+--------------------+--------------------Nama Barang         | Harga     
+--------------------+-------------------
+pulpen              | Rp4000      
+--------------------+---------------------
+Total Bayar         : Rp4000      
+Metode Pembayaran   : COD       
+======================================
+
+===========INVOICE TRANSAKSI===========
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:33:31 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+
+penggaris           | Rp5000      
+--------------------+--------------------
+
+Total Bayar         : Rp5000      
+Metode Pembayaran   : COD       
+=========================================
+
+===========INVOICE TRANSAKSI===========
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:34:47 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+penggaris           | Rp5000      
+--------------------+--------------------
+Total Bayar         : Rp5000      
+Metode Pembayaran   : COD       
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 12:40:17 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+buku tulis          | Rp7000      
+--------------------+--------------------
+Total Bayar         : Rp7000      
+Metode Pembayaran   : COD       
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 13:23:53 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+penggaris           | Rp5000      
+--------------------+--------------------
+Total Bayar         : Rp5000      
+Metode Pembayaran   : Bank      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 13:24:50 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+penggaris           | Rp5000      
+--------------------+--------------------
+Total Bayar         : Rp5000      
+Metode Pembayaran   : QRIS      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 13:30:09 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+penggaris           | Rp5000      
+--------------------+--------------------
+Total Bayar         : Rp5000      
+Metode Pembayaran   : QRIS      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 13:36:21 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+buku tulis          | Rp7000      
+--------------------+--------------------
+Total Bayar         : Rp7000      
+Metode Pembayaran   : Bank      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 13:39:28 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+penggaris           | Rp5000      
+--------------------+--------------------
+Total Bayar         : Rp5000      
+Metode Pembayaran   : QRIS      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 13:42:49 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+binder              | Rp34000     
+--------------------+--------------------
+Total Bayar         : Rp102000    
+Metode Pembayaran   : QRIS      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 14:18:32 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+pulpen              | Rp3000      
+--------------------+--------------------
+Total Bayar         : Rp6000      
+Metode Pembayaran   : Bank      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-100               
+Tanggal dan Waktu   : 2024-12-01 15:47:20 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+buku tulis          | Rp7000      
+--------------------+--------------------
+Total Bayar         : Rp7000      
+Metode Pembayaran   : COD       
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-101               
+Tanggal dan Waktu   : 2024-12-01 15:47:38 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+pulpen              | Rp3000      
+--------------------+--------------------
+Total Bayar         : Rp6000      
+Metode Pembayaran   : QRIS      
+=========================================
+
+============INVOICE TRANSAKSI============
+Nomor Transaksi     : T-102               
+Tanggal dan Waktu   : 2024-12-01 15:49:34 
+Customer            : 1                   
+--------------------+--------------------
+Nama Barang         | Harga     
+--------------------+--------------------
+stip-x              | Rp4000      
+buku tulis          | Rp7000      
+--------------------+--------------------
+Total Bayar         : Rp26000     
+Metode Pembayaran   : Bank      
+=========================================
+
