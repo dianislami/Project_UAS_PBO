@@ -14,14 +14,12 @@ public class Transaksi {
     public void tambahBarang(Barang item, int jumlah) {
         // Menambahkan barang ke dalam transaksi
         this.barang.add(new Barang(item.getIdBarang(), item.getNamaBarang(), item.getHargaBarang(), jumlah));
-        System.out.println("Barang " + item.getNamaBarang() + " sebanyak " + jumlah + " berhasil ditambahkan ke transaksi.");
     }
 
     // Method untuk menghapus barang dari transaksi
     public void hapusBarang(Barang item) {
         if (this.barang.contains(item)) {
             this.barang.remove(item);
-            System.out.println("Barang " + item.getNamaBarang() + " berhasil dihapus dari transaksi.");
         } else {
             System.out.println("Barang tidak ditemukan dalam transaksi.");
         }
@@ -31,7 +29,7 @@ public class Transaksi {
     public double hitungTotal() {
         double total = 0;
         for (Barang item : barang) {
-            total += item.getHargaBarang();
+            total += item.getHargaBarang() * item.getStokBarang();
         }
         return total;
     }
