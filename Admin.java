@@ -45,14 +45,14 @@ public class Admin extends Akun {
         if (products.isEmpty()) {
             System.out.println("Tidak ada barang tersedia.");
         } else { // Menampilkan tabel berisi informasi barang
-            System.out.println("+----+---------------+---------+-------+");
-            System.out.println("| ID | Nama Barang   | Harga   | Stok  |");
-            System.out.println("+----+---------------+---------+-------+");
+            System.out.println("+------+-------------------------+--------------+----------+");
+            System.out.println("|  ID  |       Nama Barang       |     Harga    |   Stok   |");
+            System.out.println("+------+-------------------------+--------------+----------+");
             for (Barang product : products) {
-                System.out.printf("| %-2s | %-13s | %-7.0f | %-5d |\n",
+                System.out.printf("| %-4s | %-23s | %-12.0f | %-8d |\n",
                         product.getIdBarang(), product.getNamaBarang(), product.getHargaBarang(), product.getStokBarang());
             }
-            System.out.println("+----+---------------+---------+-------+");
+            System.out.println("+------+-------------------------+--------------+----------+");
         }
     }
 
