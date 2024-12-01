@@ -29,27 +29,33 @@ public class AdminDrive extends Driver {
     public void start() {
         // Memulai antarmuka utama untuk admin
         Scanner scanner = new Scanner(System.in);
+        System.out.println("==========================");
+        System.out.println("Anda login sebagaim admin.");
+        System.out.println("==========================\n");
         while (true) {
-            System.out.println("\nMenu Admin:");
+            System.out.println("------------------");
+            System.out.println("    Menu Admin");
+            System.out.println("------------------");
             System.out.println("1. Tambah Barang");
             System.out.println("2. Edit Barang");
             System.out.println("3. Hapus Barang");
             System.out.println("4. Lihat Barang");
             System.out.println("5. Lihat Transaksi");
             System.out.println("6. Logout");
+            System.out.println("------------------");
             System.out.print("Pilih: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Membersihkan buffer input
 
             switch (choice) {
                 case 1 -> { // Menambahkan barang baru
-                    System.out.print("ID Barang: ");
+                    System.out.print("Masukkan ID Barang: ");
                     String id = scanner.nextLine();
-                    System.out.print("Nama Barang: ");
+                    System.out.print("Masukkan Nama Barang: ");
                     String name = scanner.nextLine();
-                    System.out.print("Harga Barang: ");
+                    System.out.print("MasukkanHarga Barang: ");
                     double price = scanner.nextDouble();
-                    System.out.print("Stok Barang: ");
+                    System.out.print("Masukkan Stok Barang: ");
                     int stock = scanner.nextInt();
                     listBarang.tambahBarang(new Barang(id, name, price, stock)); // Menambah barang ke daftar
                     Barang.simpanDataBarang(listBarang.barang); // Menyimpan data barang ke file
