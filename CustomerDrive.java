@@ -16,6 +16,7 @@ public class CustomerDrive extends Driver {
 
     @Override
     public Customer login(String username, String password, List<Akun> accounts) {
+        // Proses login untuk customer
         for (Akun akun : accounts) {
             if (akun instanceof Customer && akun.getUsername().equals(username) && akun.getPassword().equals(password)) {
                 return (Customer) akun;
@@ -26,6 +27,7 @@ public class CustomerDrive extends Driver {
 
     @Override
     public void start() {
+        // Menu utama untuk customer
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenu Customer:");
@@ -41,12 +43,12 @@ public class CustomerDrive extends Driver {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> {
+                case 1 -> { // Menampilkan daftar barang yang tersedia
                     System.out.println("Daftar Barang:");
                     listBarang.muatDataDariFile();
                     customer.viewBarang(listBarang.getBarang());
                 }
-                case 2 -> {
+                case 2 -> { // Menambahkan barang ke keranjang
                     System.out.print("Masukkan ID Barang: ");
                     String idBarang = scanner.nextLine();
                     Barang barang = listBarang.cariBarang(idBarang); // Cari barang di ListBarang
@@ -55,7 +57,7 @@ public class CustomerDrive extends Driver {
                         int jumlah = scanner.nextInt();
                         scanner.nextLine();
                         if (jumlah > 0 && jumlah <= barang.getStokBarang()) {
-                            customer.addToCart(barang, jumlah);
+                            customer.addToCart(barang, jumlah); // Tambahkan barang ke keranjang
                             transaksi.tambahBarang(barang, jumlah); // Tambahkan ke transaksi
                             listBarang.simpanDataKeFile(); // Kurangi stok di ListBarang
                         } else {
@@ -65,26 +67,26 @@ public class CustomerDrive extends Driver {
                         System.out.println("Barang tidak ditemukan.");
                     }
                 }
-                case 3 -> {
+                case 3 -> { // Menghapus barang dari keranjang
                     System.out.print("Masukkan ID Barang yang akan dihapus: ");
                     String idBarang = scanner.nextLine();
                     customer.removeFromCart(idBarang); // Hapus barang dari keranjang
                 }
-                case 4 -> {
+                case 4 -> { // Menampilkan isi keranjang
                     System.out.println("Isi Keranjang:");
-                    customer.viewCart(); // Tampilkan isi keranjang // Hapus barang dari keranjang
+                    customer.viewCart(); // Tampilkan isi keranjang
                 }
-                case 5 -> {
+                case 5 -> { // Melakukan proses checkout
                     System.out.println("Melakukan Checkout...");
                     customer.checkout(); // Lakukan proses checkout
                     listBarang.simpanDataKeFile(); // Print transaction details
                     // Here you can add the payment option to complete the transaction
                 }
-                case 6 -> {
+                case 6 -> { // Menampilkan riwayat transaksi
                     System.out.println("Riwayat Transaksi:");
                     invoice.bacaDariFile("C:\\Users\\asusa\\OneDrive\\Documents\\java\\uas\\customer\\" + transaksi.getAkun().getUsername() + "\\transaksi.txt");
                 }
-                case 7 -> {
+                case 7 -> { // Keluar dari menu customer
                     System.out.println("Logout berhasil.");
                     return;
                 }
