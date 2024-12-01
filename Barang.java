@@ -50,6 +50,7 @@ public class Barang {
         this.stokBarang = stokBarang;
     }
 
+    // Menampilkan informasi detail barang
     public void tampilkanInfoBarang() {
         System.out.println("ID Barang     : " + idBarang);
         System.out.println("Nama Barang   : " + namaBarang);
@@ -80,6 +81,7 @@ public class Barang {
 
     // Metode untuk menambah stok barang
     public void tambahStok(int jumlah) {
+        // Menambahkan stok barang jika jumlah yang diberikan valid
         if (jumlah > 0) {
             stokBarang += jumlah;
 
