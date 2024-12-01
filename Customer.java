@@ -1,18 +1,12 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Customer extends Akun {
-    private Keranjang keranjang;
-    private ArrayList<Invoice> invoiceSelesai;
-    private static final String FILE_NAME = "invoices.txt";
+    private Keranjang keranjang; // Keranjang belanja untuk menyimpan barang yang dipilih
+    private ArrayList<Invoice> invoiceSelesai; // Daftar invoice transaksi yang selesai
 
+    // Constructor untuk inisialisasi objek Customer
     public Customer(String id, String username, String password) {
         super(id, username, password);
         this.keranjang = new Keranjang(username);
@@ -20,10 +14,12 @@ public class Customer extends Akun {
     }
 
     @Override
+    //Mengecek apakah username dan password sesuai dengan milik customer
     public boolean login(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);
     }
 
+    // Menampilkan daftar barang yang tersedia
     public void viewBarang(List<Barang> barangList) {
         if (barangList.isEmpty()) {
             System.out.println("Tidak ada barang tersedia.");
@@ -39,18 +35,22 @@ public class Customer extends Akun {
         }
     }
 
+    // Menambahkan barang ke dalam keranjang belanja
     public void addToCart(Barang barang, int quantity) {
         keranjang.tambahBarang(barang, quantity);
     }
 
+    // Menghapus barang dari keranjang berdasarkan ID
     public void removeFromCart(String id) {
         keranjang.hapusBarang(id);
     }
 
+    // Menampilkan isi keranjang belanja
     public void viewCart() {
         keranjang.tampilkanBarang();
     }
 
+    // Proses checkout keranjang belanja
     public void checkout() {
         if (keranjang.getBarang().isEmpty()) {
             System.out.println("Keranjang kosong. Tidak dapat melakukan checkout.");
@@ -124,7 +124,7 @@ public class Customer extends Akun {
                 return;
         }
 
-        // Buat invoice
+        // Membuat invoice untuk transaksi
         Transaksi transaksi = new Transaksi(this);
         for (Barang item : barangUntukCheckout) {
             transaksi.tambahBarang(item, item.getStokBarang());
@@ -139,7 +139,7 @@ public class Customer extends Akun {
         // Tambahkan ke daftar transaksi selesai
         invoiceSelesai.add(invoice);
 
-        // Kosongkan keranjang
+        // Kosongkan barang yang di-checkout dari keranjang
         keranjang.getBarang().removeAll(barangUntukCheckout);
         keranjang.simpanKeFile();
         System.out.println("\nCheckout berhasil. Keranjang telah dikosongkan.");
