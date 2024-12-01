@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.FileHandler;
 
 public class AdminDrive extends Driver {
     private Admin admin;
@@ -17,6 +16,7 @@ public class AdminDrive extends Driver {
 
     @Override
     public Admin login(String username, String password, List<Akun> accounts) {
+        // Mengecek apakah username dan password cocok dengan data admin yang ada
         for (Akun akun : accounts) {
             if (akun instanceof Admin && akun.getUsername().equals(username) && akun.getPassword().equals(password)) {
                 return (Admin) akun;
@@ -27,6 +27,7 @@ public class AdminDrive extends Driver {
 
     @Override
     public void start() {
+        // Memulai antarmuka utama untuk admin
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenu Admin:");
@@ -38,10 +39,10 @@ public class AdminDrive extends Driver {
             System.out.println("6. Logout");
             System.out.print("Pilih: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Membersihkan buffer input
 
             switch (choice) {
-                case 1 -> {
+                case 1 -> { // Menambahkan barang baru
                     System.out.print("ID Barang: ");
                     String id = scanner.nextLine();
                     System.out.print("Nama Barang: ");
@@ -50,10 +51,10 @@ public class AdminDrive extends Driver {
                     double price = scanner.nextDouble();
                     System.out.print("Stok Barang: ");
                     int stock = scanner.nextInt();
-                    listBarang.tambahBarang(new Barang(id, name, price, stock));
-                    Barang.simpanDataBarang(listBarang.barang);
+                    listBarang.tambahBarang(new Barang(id, name, price, stock)); // Menambah barang ke daftar
+                    Barang.simpanDataBarang(listBarang.barang); // Menyimpan data barang ke file
                 }
-                case 2 -> {
+                case 2 -> { // Mengedit data barang berdasarkan ID
                     System.out.print("ID Barang yang ingin diedit: ");
                     String idBarang = scanner.nextLine();
                     Barang barang = listBarang.cariBarang(idBarang);
@@ -72,22 +73,21 @@ public class AdminDrive extends Driver {
                         Barang.simpanDataBarang(listBarang.barang);
                     }
                 }
-                case 3 -> {
+                case 3 -> { // Menghapus barang dari daftar
                     System.out.print("ID Barang yang ingin dihapus: ");
                     String idBarang = scanner.nextLine();
                     listBarang.hapusBarang(idBarang);
-                    Barang.simpanDataBarang(listBarang.barang);
+                    Barang.simpanDataBarang(listBarang.barang); // Menyimpan data barang setelah penghapusan
                 }
-                case 4 -> {
+                case 4 -> { // Menampilkan semua barang yang tersedia
                     System.out.println("Daftar Barang:");
                     listBarang.tampilkanSemuaBarang();
                 }
-                case 5 -> {
+                case 5 -> { // Menampilkan riwayat transaksi
                     System.out.println("Riwayat Transaksi:");
                     invoice.bacaDariFile("invoices.txt");
                 }
-                case 6 -> {
-                    // Logout
+                case 6 -> { // Logout dari sistem
                     System.out.println("Logout berhasil.");
                     return;
                 }
